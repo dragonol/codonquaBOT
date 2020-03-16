@@ -112,7 +112,7 @@ async function execute(message, serverQueue) {
             message.channel.send(`[Playing ${song.title}]`);
         }
         else {
-            return message.channel.send(`${song.title} has been added to the queue!`);
+            return message.channel.send(`[${song.title}] has been added to the queue!`);
         }
     }
 
@@ -129,7 +129,7 @@ function skip(message, serverQueue) {
 function pause(message, serverQueue) {
     if (!message.member.voice.channel) return message.channel.send('You have to be in a voice channel to pause the music!');
     if (!serverQueue || !serverQueue.songs) return message.channel.send('There is no song to pause!');
-    if (serverQueue.connection.paused) return message.channel.send('The song has already paused!');
+    if (serverQueue.connection.dispatcher.paused) return message.channel.send('The song has already paused!');
     message.channel.send(`Paused [${serverQueue.songs[0].title}]`);
     serverQueue.connection.dispatcher.pause();
 }
@@ -138,14 +138,14 @@ function stop(message, serverQueue) {
     if (!message.member.voice.channel) return message.channel.send('You have to be in a voice channel to stop the music!');
     if (!serverQueue || !serverQueue.songs) return message.channel.send('There is no song currently playing!');
     message.channel.send(`Stopped music`);
-    serverQueue.connection.dispatcher.end();
-    serverQueue.songs = [];
+    serverQueue.connection.disconnect();
+    queue.delete(message.guild.id);
 }
 
 function resume(message, serverQueue) {
     if (!message.member.voice.channel) return message.channel.send('You have to be in a voice channel to resume the music!');
     if (!serverQueue || !serverQueue.songs) return message.channel.send('There is no song to resume!');
-    if (!serverQueue.connection.paused) return message.channel.send('The song is already been playing!');
+    if (!serverQueue.connection.dispatcher.paused) return message.channel.send('The song is already been playing!');
     message.channel.send(`Resumed [${serverQueue.songs[0].title}]`);
     serverQueue.connection.dispatcher.resume();
 }
@@ -154,7 +154,7 @@ function play(guild, song) {
     const serverQueue = queue.get(guild.id);
 
     if (!song) {
-        serverQueue.voiceChannel.leave();
+        serverQueue.connection.disconnect();
         queue.delete(guild.id);
         return;
     }
