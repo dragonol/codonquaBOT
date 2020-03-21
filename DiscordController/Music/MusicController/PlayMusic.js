@@ -1,5 +1,5 @@
-const youtubeApiKey = require('./../../config.json').youtubeApiKey;
-const generalHelper = require('../../SupportFunctions/GeneralHelper');
+const youtubeApiKey = require('./../../../config.json').youtubeApiKey;
+const generalHelper = require('../../../SupportFunctions/GeneralHelper');
 const musicHelper = require('./MusicControllerHelper');
 
 module.exports = async function (currSong, songStream, songQueue, message, commandValue) {

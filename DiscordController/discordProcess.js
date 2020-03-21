@@ -1,4 +1,4 @@
-const musicController = require('./MusicController/MusicController');
+const musicController = require('./Music/MusicController/MusicController');
 
 module.exports = function (discordClient, prefix) {
     discordClient.once('ready', () => {

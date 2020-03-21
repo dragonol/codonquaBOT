@@ -1,6 +1,6 @@
-const axios = require('./node_modules/axios');
+const axios = require('axios');
 const ytdl = require('ytdl-core');
-const generalHelper = require('../../SupportFunctions/GeneralHelper');
+const generalHelper = require('../../../SupportFunctions/GeneralHelper');
 
 module.exports = {
 
@@ -54,7 +54,8 @@ module.exports = {
         message.channel.send(`Playing [${song.title}]`);
 
         // get song stream
-        generalHelper.copyOneLayer(songStream, ytdl(song.video_url, { filter: 'audioonly' }));
+        // generalHelper.copyOneLayer(songStream, ytdl(song.video_url, { filter: 'audioonly' }));
+        songStream = ytdl(song.video_url, { filter: 'audioonly' });
 
         // play song in voice channel
         voiceConnection.play(songStream);
