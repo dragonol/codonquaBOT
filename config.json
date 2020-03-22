@@ -1,6 +1,5 @@
 {
-    "prefix": "!!",
-    "token": "Njg4NjQ2ODExMTU3OTIxODMy.XnYOOg.yLaT9lxVT_MmdjVzFBLVlAhDcCM",
-    "youtubeApiKey": "AIzaSyCuFBbCVVY30CGLUmAL-C3um7gfvx-Y4O8",
-    "old": "Njg4NjQ2ODExMTU3OTIxODMy.Xm-7hg.FxRkmyyNSw1KT_R4C3k87nkQK1I"
+    "commandPrefix": "!",
+    "discordToken": "Njg4NjQ2ODExMTU3OTIxODMy.XnZONQ.2ICo6i7tAaaLBR7ItfR-DttEqO4",
+    "youtubeApiKey": "AIzaSyCuFBbCVVY30CGLUmAL-C3um7gfvx-Y4O8"
 }

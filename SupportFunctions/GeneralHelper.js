@@ -1,3 +1,6 @@
+const axios = require('axios');
+const youtubeApiKey = require('./../config.json').youtubeApiKey;
+
 module.exports = {
     validURL: function (str) {
         var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
@@ -13,23 +16,44 @@ module.exports = {
         }
     },
 
-    copyOneLayer: function (des, src) {
-        // check if des is null
-        if (des === null || des === undefined) {
-            des = {};
+    youtubeSearch: async function (args) {
+        // construct youtube search URL
+        var searchURL = `https://www.googleapis.com/youtube/v3/search?part=id&key=${youtubeApiKey}`;
+
+        // construct youtube find video URL
+        var findVideoURL = `https://www.googleapis.com/youtube/v3/videos?key=${youtubeApiKey}`;
+        for (var prop in args) {
+            if (prop == 'part') {
+                findVideoURL += `&${prop}=${args[prop]}`;
+                continue;
+            }
+            searchURL += `&${prop}=${args[prop]}`;
         }
 
-        // copy
-        for (var key in src) {
-            des[key] = src[key];
+        // get video IDs
+        var videoIDs = [];
+        await axios.get(searchURL)
+            .then(function (data) {
+                data.data.items.forEach(item => {
+                    videoIDs.push(item.id.videoId);
+                });
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+
+        // get result videos
+        resultVideos = [];
+        for (var i in videoIDs) {
+            await axios.get(`${findVideoURL}&id=${videoIDs[i]}`)
+                .then(function (data) {
+                    data.data.items.forEach(item => {
+                        item.video_url = 'https://www.youtube.com/watch?v=' + item.id;
+                        resultVideos.push(item);
+                    });
+                })
         }
+
+        return resultVideos;
     },
-
-    isEmpty: function (obj) {
-        for (var key in obj) {
-            if (obj.hasOwnProperty(key))
-                return false;
-        }
-        return true;
-    }
 }

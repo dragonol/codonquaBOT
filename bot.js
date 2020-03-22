@@ -1,16 +1,10 @@
 const discord = require('discord.js');
-
-const {
-    prefix,
-    token,
-    youtubeApiKey
-} = require('./config.json');
+const discordToken = require('./config.json').discordToken;
 const discordProcess = require('./DiscordController/discordProcess');
 
 const client = new discord.Client();
-const queue = new Map();
 
-discordProcess(client, prefix);
+discordProcess(client);
 
-client.login(token);
+client.login(discordToken);
 
