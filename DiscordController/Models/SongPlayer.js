@@ -25,6 +25,7 @@ module.exports = {
             // when song end
             var self = this; // really confuse with js this part :(((
             this.voiceConnection.dispatcher.on('finish', function () {
+                console.log('end song');
                 // if there's no song in queue, stop
                 if (self.songQueue.length == 0) {
                     self.currSong = null;
