@@ -10,50 +10,77 @@ module.exports = {
             '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
             '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
 
-        return {
-            valid: !!pattern.test(str),
-            domain: RegExp.$3
-        }
+        return !!pattern.test(str)
     },
+    matchYoutubeURL: function (url) {
+        var pattern = new RegExp(String.raw`^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$`);
 
-    youtubeSearch: async function (args) {
+        // 1.protocol
+        // 2.subdomain
+        // 3.domain
+        // 4.path
+        // 5.video code
+        // 6.query string
+
+        var match = url.match(pattern);
+        return match ? match : false;
+    },
+    youtubeSearchVideo: async function (args) {
         // construct youtube search URL
-        var searchURL = `https://www.googleapis.com/youtube/v3/search?part=id&key=${youtubeApiKey}`;
+        var searchURL = `https://www.googleapis.com/youtube/v3/search?key=${youtubeApiKey}`;
 
-        // construct youtube find video URL
-        var findVideoURL = `https://www.googleapis.com/youtube/v3/videos?key=${youtubeApiKey}`;
+        // add args to URLs
         for (var prop in args) {
-            if (prop == 'part') {
-                findVideoURL += `&${prop}=${args[prop]}`;
-                continue;
-            }
             searchURL += `&${prop}=${args[prop]}`;
         }
 
-        // get video IDs
-        var videoIDs = [];
+        // search videos
+        var results = [];
         await axios.get(searchURL)
             .then(function (data) {
                 data.data.items.forEach(item => {
-                    videoIDs.push(item.id.videoId);
+                    results.push(item);
                 });
             })
             .catch(function (err) {
                 console.log(err);
             })
 
-        // get result videos
-        resultVideos = [];
-        for (var i in videoIDs) {
-            await axios.get(`${findVideoURL}&id=${videoIDs[i]}`)
-                .then(function (data) {
-                    data.data.items.forEach(item => {
-                        item.video_url = 'https://www.youtube.com/watch?v=' + item.id;
-                        resultVideos.push(item);
-                    });
-                })
+        return results;
+    },
+    youtubeGetVideo: async function (args) {
+        // construct youtube find video URL
+        var getVideoURL = `https://www.googleapis.com/youtube/v3/videos?key=${youtubeApiKey}`;
+
+        for (var prop in args) {
+            getVideoURL += `&${prop}=${args[prop]}`;
         }
 
-        return resultVideos;
+        // get videos
+        var result;
+        await axios.get(getVideoURL)
+            .then(function (data) {
+                result = data.data.items[0];
+            })
+            .catch(function (err) {
+                console.log(err);
+            })
+
+        return result;
     },
+    YTDurationToMiliseconds: function(duration) {
+        var match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+      
+        match = match.slice(1).map(function(x) {
+          if (x != null) {
+              return x.replace(/\D/, '');
+          }
+        });
+      
+        var hours = (parseInt(match[0]) || 0);
+        var minutes = (parseInt(match[1]) || 0);
+        var seconds = (parseInt(match[2]) || 0);
+      
+        return (hours * 3600 + minutes * 60 + seconds) * 1000;
+      }
 }

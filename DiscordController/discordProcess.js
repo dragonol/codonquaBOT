@@ -37,7 +37,8 @@ module.exports = function (discordClient, prefix) {
         switch (command) {
             case 'p':
             case 'play':
-                player.playSong(commandValue);
+                if (commandValue)
+                    player.playSong(commandValue);
                 break;
             case 'pause':
                 player.pauseSong();
