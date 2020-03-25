@@ -46,7 +46,12 @@ module.exports = function (discordClient, prefix) {
             case 'resume':
                 player.resumeSong();
                 break;
-
+            case 'skip':
+                player.skipSong();
+                break;
+            case 'q':
+            case 'queue':
+                player.showQueue();
             default:
                 break;
         }

@@ -18,7 +18,7 @@ module.exports = {
 
             // get song stream
             this.songStream = ytdl('https://www.youtube.com/watch?v=' + this.currSong.id, { filter: 'audioonly' });
-            
+
             // play song in voice channel
             this.voiceConnection.play(this.songStream);
 
@@ -110,7 +110,7 @@ module.exports = {
             if (this.voiceConnection === null || !this.voiceConnection == this.message.member.voice.connection) {
                 this.voiceConnection = await this.message.member.voice.channel.join();
             }
-            
+
             // play song
             this.makeSongPlay();
         }
@@ -123,5 +123,31 @@ module.exports = {
             this.voiceConnection.dispatcher.resume();
         }
 
+        skipSong() {
+            // destroy song stream
+            this.voiceConnection.dispatcher.destroy();
+
+            // if there's no song in queue, stop
+            if (this.songQueue.length == 0) {
+                this.currSong = null;
+                return;
+            }
+
+            // take song out of song queue and set to current song
+            this.currSong = this.songQueue.shift();
+
+            // continue to play song
+            this.makeSongPlay();
+        }
+
+        showQueue() {
+            var displayMessage = '';
+            for (var i in this.songQueue) {
+                displayMessage += `${i}.${this.songQueue[i]}\n`;
+            }
+            this.message.channel.send(displayMessage);
+        }
+
+        
     }
 }
