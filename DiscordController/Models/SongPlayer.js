@@ -142,12 +142,15 @@ module.exports = {
 
         showQueue() {
             var displayMessage = '';
+            
             for (var i in this.songQueue) {
                 displayMessage += `${i}.${this.songQueue[i]}\n`;
             }
-            this.message.channel.send(displayMessage);
+
+            if (displayMessage != '')
+                this.message.channel.send(displayMessage);
         }
 
-        
+
     }
 }
