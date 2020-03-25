@@ -140,16 +140,21 @@ module.exports = {
             this.makeSongPlay();
         }
 
+        remove(pos) {
+            this.songQueue = this.songQueue.slice(pos - 1, pos - 1);
+        }
+
         showQueue() {
             var displayMessage = '';
-            
-            for (var i in this.songQueue) {
-                displayMessage += `${i}.${this.songQueue[i]}\n`;
+
+            for (let i = 0; i < this.songQueue.length; i++) {
+                displayMessage += `${i + 1}. ${this.songQueue[i].snippet.title}`;
             }
 
             if (displayMessage != '')
                 this.message.channel.send(displayMessage);
         }
+
 
 
     }
