@@ -141,21 +141,30 @@ module.exports = {
         }
 
         remove(pos) {
-            this.songQueue = this.songQueue.slice(pos - 1, pos - 1);
+            var processPos;
+            // if not an interger exit
+            if (!(processPos = parseInt(pos))) {
+                this.message.channel.send('Invalid remove position!');
+                return;
+            }
+
+            processPos -= 1;
+
+            this.message.channel.send(`Remove [${this.songQueue[processPos].snippet.title}] from queue`);
+            this.songQueue = this.songQueue.splice(processPos, 1);
         }
 
         showQueue() {
-            var displayMessage = '';
+            this.message.channel.send(`Playing: ${this.currSong.snippet.title}\nQueue:\n`);
 
+            var displayMessage = '';
             for (let i = 0; i < this.songQueue.length; i++) {
-                displayMessage += `${i + 1}. ${this.songQueue[i].snippet.title}`;
+                displayMessage += `${i + 1}. ${this.songQueue[i].snippet.title}\n`;
             }
 
-            if (displayMessage != '')
+            if (displayMessage != '') {
                 this.message.channel.send(displayMessage);
+            }
         }
-
-
-
     }
 }

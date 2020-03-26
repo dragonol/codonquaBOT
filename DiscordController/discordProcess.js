@@ -22,8 +22,9 @@ module.exports = function (discordClient, prefix) {
         player.message = message;
 
         // check if message come from bot
-        if (message.author.bot)
-            return;
+        // if (message.author.bot)
+        //     return;
+
         // check if message start with command prefix
         if (!message.content.startsWith(commandPrefix))
             return;
@@ -49,9 +50,21 @@ module.exports = function (discordClient, prefix) {
             case 'skip':
                 player.skipSong();
                 break;
+            case 'rm':
+            case 'remove':
+                player.remove(commandValue);
+                break;
             case 'q':
             case 'queue':
                 player.showQueue();
+                break;
+            case 'vyden':
+                message.channel.send('A^g^l');
+                break;
+            case 'khanhfarm':
+            case 'nguyenminh':
+                message.channel.send('Sao t lại phải trả lời m :))');
+                break;
             default:
                 break;
         }
