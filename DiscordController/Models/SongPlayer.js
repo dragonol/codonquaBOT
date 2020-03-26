@@ -151,7 +151,7 @@ module.exports = {
             processPos -= 1;
 
             this.message.channel.send(`Remove [${this.songQueue[processPos].snippet.title}] from queue`);
-            this.songQueue = this.songQueue.splice(processPos, 1);
+            this.songQueue.splice(processPos, 1);
         }
 
         showQueue() {
