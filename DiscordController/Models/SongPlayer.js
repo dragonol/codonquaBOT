@@ -81,6 +81,12 @@ module.exports = {
         }
 
         async playSong(commandValue) {
+            // check if join voice channel
+            if(!this.message.member.voice.channel) {
+                this.message.channel.send('Join voice channel to play song!');
+                return;
+            }
+            
             //search for song
             var searchSong = await this.searchSong(commandValue);
 
@@ -107,7 +113,7 @@ module.exports = {
             this.currSong = searchSong;
 
             // join channel
-            if (this.voiceConnection === null || !this.voiceConnection == this.message.member.voice.connection) {
+            if (this.voiceConnection === null || !(this.voiceConnection == this.message.member.voice.connection)) {
                 this.voiceConnection = await this.message.member.voice.channel.join();
             }
 
@@ -141,17 +147,17 @@ module.exports = {
         }
 
         remove(pos) {
-            var processPos;
+
             // if not an interger exit
-            if (!(processPos = parseInt(pos))) {
+            if (!(pos = parseInt(pos))) {
                 this.message.channel.send('Invalid remove position!');
                 return;
             }
 
-            processPos -= 1;
+            pos -= 1;
 
-            this.message.channel.send(`Remove [${this.songQueue[processPos].snippet.title}] from queue`);
-            this.songQueue.splice(processPos, 1);
+            this.message.channel.send(`Remove [${this.songQueue[pos].snippet.title}] from queue`);
+            this.songQueue.splice(pos, 1);
         }
 
         showQueue() {
