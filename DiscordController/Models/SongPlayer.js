@@ -155,7 +155,8 @@ module.exports = {
         }
 
         showQueue() {
-            this.message.channel.send(`Playing: ${this.currSong.snippet.title}\nQueue:\n`);
+
+            this.message.channel.send(`Playing: ${this.currSong ? this.currSong.snippet.title : 'There\'s no song currently playing'}\nQueue:\n`);
 
             var displayMessage = '';
             for (let i = 0; i < this.songQueue.length; i++) {
