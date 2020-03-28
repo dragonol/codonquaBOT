@@ -1,5 +1,5 @@
 const generalHelper = require('../../SupportFunctions/GeneralHelper');
-const ytdl = require('ytdl-core');
+const ytdl = require('ytdl-core-discord');
 
 module.exports = {
     SongPlayer: class SongPlayer {
@@ -20,7 +20,7 @@ module.exports = {
             this.songStream = ytdl('https://www.youtube.com/watch?v=' + this.currSong.id, { filter: 'audioonly' });
 
             // play song in voice channel
-            this.voiceConnection.play(this.songStream);
+            this.voiceConnection.play(this.songStream, { type: "opus" });
 
             // when song end
             var self = this; // really confuse with js this part :(((
@@ -82,11 +82,11 @@ module.exports = {
 
         async playSong(commandValue) {
             // check if join voice channel
-            if(!this.message.member.voice.channel) {
+            if (!this.message.member.voice.channel) {
                 this.message.channel.send('Join voice channel to play song!');
                 return;
             }
-            
+
             //search for song
             var searchSong = await this.searchSong(commandValue);
 
