@@ -1,5 +1,5 @@
 const generalHelper = require('../../SupportFunctions/GeneralHelper');
-const ytdl = require('ytdl-core-discord');
+const ytdl = require('ytdl-core');
 
 module.exports = {
     SongPlayer: class SongPlayer {
@@ -11,16 +11,16 @@ module.exports = {
             this.message = null;
         }
 
-        async makeSongPlay() {
+        makeSongPlay() {
             // announce playing song
             console.log(`Playing [${this.currSong.snippet.title}]`);
             this.message.channel.send(`Playing [${this.currSong.snippet.title}]`);
 
             // get song stream
-            this.songStream = await ytdl('https://www.youtube.com/watch?v=' + this.currSong.id, { filter: 'audioonly' });
+            this.songStream = ytdl('https://www.youtube.com/watch?v=' + this.currSong.id, { filter: 'audioonly' });
 
             // play song in voice channel
-            this.voiceConnection.play(this.songStream, { type: "opus" });
+            this.voiceConnection.play(this.songStream);
 
             // when song end
             var self = this; // really confuse with js this part :(((
@@ -36,7 +36,7 @@ module.exports = {
                 self.currSong = self.songQueue.shift();
 
                 // continue to play song
-                await self.makeSongPlay();
+                self.makeSongPlay();
 
             }).on('error', console.error);
         }
@@ -118,7 +118,7 @@ module.exports = {
             }
 
             // play song
-            await this.makeSongPlay();
+            this.makeSongPlay();
         }
 
         pauseSong() {
