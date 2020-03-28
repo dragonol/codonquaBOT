@@ -17,7 +17,7 @@ module.exports = {
             this.message.channel.send(`Playing [${this.currSong.snippet.title}]`);
 
             // get song stream
-            this.songStream = ytdl('https://www.youtube.com/watch?v=' + this.currSong.id, { filter: 'audioonly' });
+            this.songStream = await ytdl('https://www.youtube.com/watch?v=' + this.currSong.id, { filter: 'audioonly' });
 
             // play song in voice channel
             this.voiceConnection.play(this.songStream, { type: "opus" });
