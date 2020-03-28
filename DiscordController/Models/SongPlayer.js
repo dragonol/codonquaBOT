@@ -24,7 +24,7 @@ module.exports = {
 
             // when song end
             var self = this; // really confuse with js this part :(((
-            this.voiceConnection.dispatcher.on('finish', function () {
+            this.voiceConnection.dispatcher.on('finish', async function () {
                 console.log('end song');
                 // if there's no song in queue, stop
                 if (self.songQueue.length == 0) {
@@ -36,7 +36,7 @@ module.exports = {
                 self.currSong = self.songQueue.shift();
 
                 // continue to play song
-                self.makeSongPlay();
+                await self.makeSongPlay();
 
             }).on('error', console.error);
         }
@@ -118,7 +118,7 @@ module.exports = {
             }
 
             // play song
-            this.makeSongPlay();
+            await this.makeSongPlay();
         }
 
         pauseSong() {
