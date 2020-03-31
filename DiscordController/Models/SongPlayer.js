@@ -22,8 +22,9 @@ module.exports = {
             // play song in voice channel
             this.voiceConnection.play(this.songStream);
 
+            // when song end
             var self = this; // really confuse with js this part :(((
-            this.songStream.on('end', function () {
+            this.voiceConnection.dispatcher.on('finish', async function () {
                 console.log('end song');
                 // if there's no song in queue, stop
                 if (self.songQueue.length == 0) {
